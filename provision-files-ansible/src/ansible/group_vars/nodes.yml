@@ -1,0 +1,10 @@
+---
+
+# Docker
+docker_users:
+  - root
+# Docker Compose
+docker_install_compose: false
+
+# Kubernetes
+kubernetes_role: "node"

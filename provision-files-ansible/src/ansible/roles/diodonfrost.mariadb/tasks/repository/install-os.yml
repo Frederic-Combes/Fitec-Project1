@@ -1,0 +1,68 @@
+# Install repository from Mariadb official repository
+
+- name: "(Install: Centos/Debian/Fedora/Opensuse/RedHat/Ubuntu) Install Mariadb with official Mariadb repos"
+  block:
+
+    - name: Mariadb CentOS repos
+      import_tasks: setup-CentOS.yml
+      when: ansible_distribution  == "CentOS"
+
+    - name: Mariadb Debian repos
+      import_tasks: setup-Debian.yml
+      when: ansible_distribution  == "Debian"
+
+    - name: Mariadb Fedora repos
+      import_tasks: setup-Fedora.yml
+      when: ansible_distribution  == "Fedora"
+
+    - name: Mariadb OpenSuse repos
+      import_tasks: setup-openSUSE Leap.yml
+      when: ansible_distribution  == "openSUSE Leap"
+
+    - name: Mariadb RedHat repos
+      import_tasks: setup-RedHat.yml
+      when: ansible_distribution  == "RedHat"
+
+    - name: Mariadb Ubuntu repos
+      import_tasks: setup-Ubuntu.yml
+      when: ansible_distribution  == "Ubuntu"
+
+    - name: Mariadb-server install from Mariadb repository
+      package:
+        name: "{{ mariadb_packages }}"
+        state: present
+
+  when: install_from == "mariadb_repository"
+
+- name: "(Install: Centos/Debian/Fedora/Opensuse/RedHat/Ubuntu/bsd) Install Mariadb with os repository"
+  block:
+
+  - name: Update apt cache
+    apt:
+      update_cache: yes
+      name: "{{ mariadb_packages }}"
+      state: present
+    # changed_when: false
+    when: ansible_os_family == "Debian"
+
+  - name: Mariadb install from os repository
+    package:
+      name: "{{ mariadb_packages }}"
+      state: present
+    when: ansible_os_family != "Debian"
+
+  - name: setup Mariadb on FreeBSD
+    import_tasks: setup-FreeBSD.yml
+    when: ansible_distribution  == "FreeBSD"
+
+  - name: setup Mariadb on OpenBSD
+    import_tasks: setup-OpenBSD.yml
+    when: ansible_distribution  == "OpenBSD"
+
+  when: install_from == "os_repository"
+
+- name: Mariadb service
+  service:
+    name: "{{ mariadb_service }}"
+    state: started
+    enabled: yes

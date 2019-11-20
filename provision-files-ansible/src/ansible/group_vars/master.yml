@@ -1,0 +1,15 @@
+---
+
+# Must sudo on localhost
+ansible_become: true
+
+# Docker
+docker_users:
+  - vagrant
+  - root
+# Docker Compose
+docker_install_compose: true
+docker_compose_version: "1.22.0"
+
+# Kubernetes
+kubernetes_role: "master"

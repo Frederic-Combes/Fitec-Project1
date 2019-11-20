@@ -1,0 +1,21 @@
+---
+# tasks file for ansible-role-mariadb
+
+- name: Include OS specific variables.
+  include_vars: "{{ ansible_distribution }}.yml"
+
+- name: Install Mariadb
+  include_tasks: "repository/install-os.yml"
+  when: mariadb_install|bool
+
+- name: Ensure Mariadb configfile are present
+  include_tasks: "config/template-config.yml"
+
+- name: Ensure Mariadb database are present
+  include_tasks: "database/databases.yml"
+
+- name: Add Mariadb users are present
+  include_tasks: "database/users.yml"
+
+- name: Mariadb secure parameters
+  include_tasks: "database/secure.yml"

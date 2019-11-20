@@ -1,0 +1,23 @@
+---
+
+# Don't sudo
+ansible_become: false
+
+# Docker
+docker_edition: "ce"
+docker_service_state: started
+docker_service_enabled: true
+docker_restart_handler_state: restarted
+
+# Kubernetes
+kubernetes_packages:
+  - name: kubelet
+    state: present
+  - name: kubectl
+    state: present
+  - name: kubeadm
+    state: present
+kubernetes_allow_pods_on_master: false
+# Flannel config files.
+# kubernetes_flannel_manifest_file_rbac: ./files/kube-flannel-rbac.yml
+# kubernetes_flannel_manifest_file: ./files/kube-flannel.yml

@@ -1,0 +1,57 @@
+---
+galaxy_info:
+  role_name: mariadb
+  author: diodonfrost
+  company: dodonfrost
+  description: mariadb install and setup
+
+  license: license Apache
+
+  min_ansible_version: 2.4
+
+  platforms:
+    - name: EL
+      versions:
+        - 8
+        - 6
+        - 7
+    - name: Fedora
+      versions:
+        - 29
+        - 28
+        - 27
+        - 26
+    - name: Debian
+      versions:
+        - buster
+        - stretch
+        - jessie
+    - name: Ubuntu
+      versions:
+        - disco
+        - bionic
+        - xenial
+        - trusty
+        - precise
+    - name: opensuse
+      versions:
+        - all
+    - name: OracleLinux
+      versions:
+        - 7
+    - name: Amazon
+      versions:
+        - 2017.12
+    - name: FreeBSD
+      versions:
+        - 11.0
+        - 10.4
+    - name: OpenBSD
+      versions:
+        - 6.0
+
+  galaxy_tags:
+   - system
+   - database
+
+dependencies: []

@@ -1,0 +1,53 @@
+---
+# defaults file for ansible-role-mariadb
+
+# Install Mariadb.
+# Default is true.
+mariadb_install: true
+
+# Specify repository origin for Mariadb.
+# Options are 'mariadb_repository' or 'os_repository'.
+# Default is mariadb_repository.
+# OS supported with mariadb_repository:
+# Redhat/CentOS 6,7
+# Debian 8,9
+# Ubuntu 18.04, 17.10, 16.04, 14.04
+install_from: mariadb_repository
+
+# Specifie version of mariadb (http://yum.mariadb.org/) or https://downloads.mariadb.org/mariadb/repositories/#mirror=ovh
+mariadb_version: 10.3
+
+# Debian apt repository key id
+debian_repository_id: ['0xF1656F24C74CD1D8', '0xcbcb082a1bb943db']
+
+# Ubuntu apt repository key id
+ubuntu_repository_id: ['0xF1656F24C74CD1D8', '0xcbcb082a1bb943db']
+
+# Add mariabd databases
+# default create nothing
+mariadb_database: []
+#  - name: database10
+#    state: present
+
+# Add mariabd users
+# default create nothing
+mariadb_user: []
+#  - name: user1
+#    host: 127.0.0.1
+#    password: secret
+#    priv: '*.*:ALL'
+#    encrypted: false
+
+# Allow remote root login
+# default: false
+disable_remote_root_login: true
+
+# Specify address to listen
+mariadb_bind_address: '0.0.0.0'
+
+# Specify tcp port to listen
+mariadb_port: 3306
+
+# Specify slow query log
+mariadb_slow_query_log_enabled: false
+mariadb_slow_query_time: "2"

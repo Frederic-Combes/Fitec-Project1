@@ -1,0 +1,187 @@
+---
+
+- hosts: nfs
+  tasks:
+    - name: Create /data
+      file:
+        dest: /data
+        state: directory
+    - name: Install NFS Server
+      import_role:
+        name: geerlingguy.nfs
+      vars:
+        nfs_exports:
+          - "/data server*(rw,sync,no_root_squash,subtree_check)"
+
+- hosts: apache
+  tasks:
+    - name: Insatll NFS Client
+      apt:
+        pkg: nfs-common
+
+- hosts: haproxy
+  become: true
+  tasks:
+    - name: Install HAProxy
+      import_role:
+        name: geerlingguy.haproxy
+      vars:
+        haproxy_backend_servers:
+          - name: server1
+            address: server1:80
+          - name: server2
+            address: server2:80
+
+- hosts: apache
+  tasks:
+    - name: Install Apache2
+      import_role:
+        name: geerlingguy.apache
+    - name: Install PHP
+      import_role:
+        name: geerlingguy.php
+      vars:
+        php_packages:
+          - php
+          - php-cli
+          - php-apcu
+          - php-mysql
+        php_default_version_debian: "7.3"
+    - name: Add VirtualHosts
+      template:
+        src: vhosts.conf.j2
+        dest: "/etc/apache2/sites-available/vhost.conf"
+        owner: root
+        group: root
+        mode: 644
+
+- hosts: mariadb
+  tasks:
+    - name: Install MariaDB
+      apt:
+        name:
+          - mariadb-server
+          - mariadb-common
+          - python-mysqldb
+    - name: Setup Mariadb config file
+      template:
+        src: server.j2
+        dest: "{{ mariadb_config_file }}"
+        owner: "{{ mariadb_config_file_owner }}"
+        group: "{{ mariadb_config_file_group }}"
+        mode: 0644
+      vars:
+        - mariadb_config_file: /etc/mysql/my.cnf
+        - mariadb_config_file_owner: root
+        - mariadb_config_file_group: root
+        - mariadb_bind_address: "0.0.0.0"
+        - mariadb_port: 3306
+        - mariadb_slow_query_log_enabled: false
+        - mariadb_slow_query_time: "2"
+    - name: Enable Mariadb service
+      service:
+        name: "{{ mariadb_service }}"
+        state: restarted
+        enabled: yes
+      vars:
+        - mariadb_service: mysql
+    # - name: Set Mariadb root password
+    #   mysql_user:
+    #     name: root
+    #     password: rootpwd12
+    - name: Ensure Mariadb database are present
+      mysql_db:
+        name: "{{ item.name }}"
+        state: "{{ item.state | default('present') }}"
+      with_items:
+        - name: devopsdb
+        - name: devsecdb
+        - name: devsecopsdb
+    - name: Ensure Mariadb user are present
+      mysql_user:
+        name: "{{ item.name }}"
+        host: "{{ item.host | default('localhost') }}"
+        password: "{{ item.password }}"
+        priv: "{{ item.priv | default('*.*:USAGE') }}"
+        encrypted: "{{ item.encrypted | default('no') }}"
+      with_items:
+        - name: devops
+          password: devopspwd123
+          priv: "devopsdb.*:ALL"
+          host: "192.168.50.%"
+        - name: devsec
+          password: devsecpwd123
+          priv: "devsecdb.*:ALL"
+          host: "192.168.50.%"
+        - name: devsecops
+          password: devsecopspwd123
+          priv: "devsecopsdb.*:ALL"
+          host: "192.168.50.%"
+
+- hosts: apache
+  tasks:
+    - name: Install MariaDB client
+      apt:
+        name:
+          - mariadb-common
+          - mariadb-client
+        state: present
+    - name: Install Wordpress
+      include_role:
+        name: oefenweb.wordpress
+      vars:
+        wordpress_installs:
+          - name: devops
+            dbname: devopsdb
+            dbuser: devops
+            dbpass: "devopspwd123"
+            dbhost: server3
+            path: "/var/www/devops.com"
+            title: devops
+            admin_name: admin
+            admin_email: "admin@admin.adm"
+            admin_password: wordpressadminpwd123
+            url: http://devops.com
+            themes:
+              - name: twentytwelve
+                activate: true
+            plugins: []
+            users: {}
+            options: []
+            queries: []
+          - name: devsec
+            dbname: devsecdb
+            dbuser: devsec
+            dbpass: "devsecpwd123"
+            dbhost: server3
+            path: "/var/www/devsec.com"
+            title: devsec
+            admin_name: admin
+            admin_email: "admin@admin.adm"
+            admin_password: wordpressadminpwd123
+            url: http://devsec.com
+            themes:
+              - name: twentytwelve
+                activate: true
+            plugins: []
+            users: {}
+            options: []
+            queries: []
+          - name: devsecops
+            dbname: devsecopsdb
+            dbuser: devsecops
+            dbpass: "devsecopspwd123"
+            dbhost: server3
+            path: "/var/www/devsecops.com"
+            title: devsecops
+            admin_name: admin
+            admin_email: "admin@admin.adm"
+            admin_password: wordpressadminpwd123
+            url: http://devsecops.com
+            themes:
+              - name: twentytwelve
+                activate: true
+            plugins: []
+            users: {}
+            options: []
+            queries: []

@@ -1,0 +1,22 @@
+---
+all:
+  hosts:
+    server0:
+    server1:
+    server2:
+    server3:
+    server4:
+  children:
+    haproxy:
+      hosts:
+        server0:
+    apache:
+      hosts:
+        server1:
+        server2:
+    mariadb:
+      hosts:
+        server3:
+    nfs:
+      hosts:
+        server4:
