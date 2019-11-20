@@ -6,13 +6,13 @@ Start the virtual machines:
 vagrant up
 ```
 
-Provision server0:
+Provision server0 (after modifying the ansible install playbook):
 
 ```bash
 vagrant rsync && vagrant provision server0
 ```
 
-Run the Ansible `install.yml`:
+Run the Ansible `install.yml` playbook:
 
 ```bash
 vagrant ssh server0
