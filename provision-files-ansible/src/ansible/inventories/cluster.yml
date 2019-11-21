@@ -7,6 +7,8 @@ all:
     s3.infra:
     s4.infra:
   children:
+    dns:
+      s0.infra:
     haproxy:
       hosts:
         s0.infra:

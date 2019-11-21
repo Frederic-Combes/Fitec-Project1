@@ -1,0 +1,16 @@
+---
+- hosts: dns
+  tasks:
+    - name: Install DNSmasq
+      apt:
+        name:
+          - dnsmasq
+    - name: Configure DNSmasq
+      template:
+        src: "etc_dnsmasq.conj.j"
+        dest: "/etc/dnsmasq.conf"
+    - name: Restart DNSmasq service
+      service:
+        name: dnsmasq
+        state: restarted
+        enabled: true

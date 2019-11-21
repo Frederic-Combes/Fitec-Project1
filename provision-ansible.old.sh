@@ -27,6 +27,10 @@ sed -i -e '/^## BEGIN PROVISION/,/^## END PROVISION/d' /etc/hosts
 cat >> /etc/hosts <<-MARK
 	## BEGIN PROVISION
 	192.168.50.100  s0.infra
+	192.168.50.101  s1.infra
+	192.168.50.102  s2.infra
+	192.168.50.103  s3.infra
+	192.168.50.103  s4.infra
 	## END PROVISION
 MARK
 
