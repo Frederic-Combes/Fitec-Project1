@@ -30,6 +30,10 @@ cat >> /etc/hosts <<-MARK
 	## END PROVISION
 MARK
 
+cat > /etc/resolv.conf <<-MARK
+nameserver 192.168.50.100
+MARK
+
 # Allow the ansible SSH key
 mkdir -p $ROOT_HOME/.ssh
 cat $SYNC_FOLDER/ansible_rsa.pub >> $ROOT_HOME/.ssh/authorized_keys || :
