@@ -15,9 +15,15 @@
 
 - hosts: apache
   tasks:
-    - name: Insatll NFS Client
+    - name: Install NFS Client
       apt:
         pkg: nfs-common
+    - name: Mount /var/www/ on nfs:/data
+      mount:
+        path: /var/www
+        src: server4:/data
+        fstype: nfs
+        state: unmounted
 
 - hosts: haproxy
   become: true
@@ -37,6 +43,15 @@
     - name: Install Apache2
       import_role:
         name: geerlingguy.apache
+      vars:
+        apache_create_vhosts: true
+        apache_vhosts:
+          - servername: devops.com
+            documentroot: /var/www/devops.com
+          - servername: devsec.com
+            documentroot: /var/www/devsec.com
+          - servername: devsecops.com
+            documentroot: /var/www/devsecops.com
     - name: Install PHP
       import_role:
         name: geerlingguy.php
@@ -47,13 +62,6 @@
           - php-apcu
           - php-mysql
         php_default_version_debian: "7.3"
-    - name: Add VirtualHosts
-      template:
-        src: vhosts.conf.j2
-        dest: "/etc/apache2/sites-available/vhost.conf"
-        owner: root
-        group: root
-        mode: 644
 
 - hosts: mariadb
   tasks:
@@ -119,6 +127,7 @@
           host: "192.168.50.%"
 
 - hosts: apache
+  serial: 1
   tasks:
     - name: Install MariaDB client
       apt:
@@ -161,7 +170,7 @@
             admin_password: wordpressadminpwd123
             url: http://devsec.com
             themes:
-              - name: twentytwelve
+              - name: twentythirteen
                 activate: true
             plugins: []
             users: {}
@@ -179,7 +188,7 @@
             admin_password: wordpressadminpwd123
             url: http://devsecops.com
             themes:
-              - name: twentytwelve
+              - name: twentyfourteen
                 activate: true
             plugins: []
             users: {}
