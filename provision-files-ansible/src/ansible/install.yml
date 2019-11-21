@@ -23,7 +23,24 @@
         path: /var/www
         src: server4:/data
         fstype: nfs
-        state: unmounted
+        state: mounted
+    - name: Ensure /var/www/html exists and is owned by www-data
+      file:
+        dest: /var/www/html
+        owner: www-data
+        group: www-data
+        state: directory
+    # - name: Gather stats for /var/www/html/index.html
+    #   stat:
+    #     path:: /var/www/html/index.html
+    #     register: var_www_index_html
+    - name: Ensures that /var/www/html/index.html exists is owned by www-data
+      file:
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        state: touch
+      # when: var_www_index_html.stat.exists == False
 
 - hosts: haproxy
   become: true
