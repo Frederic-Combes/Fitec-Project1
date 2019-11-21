@@ -20,11 +20,11 @@ apt-get install -y curl wget rsync
 sed -i -e '/^## BEGIN PROVISION/,/^## END PROVISION/d' /etc/hosts
 cat >> /etc/hosts <<-MARK
 	## BEGIN PROVISION
-	192.168.50.100  server0
-	192.168.50.101  server1
-	192.168.50.102  server2
-	192.168.50.103  server3
-	192.168.50.103  server4
+	192.168.50.100  s0.infra
+	192.168.50.101  s1.infra
+	192.168.50.102  s2.infra
+	192.168.50.103  s3.infra
+	192.168.50.103  s4.infra
 	## END PROVISION
 MARK
 

@@ -1,22 +1,22 @@
 ---
 all:
   hosts:
-    server0:
-    server1:
-    server2:
-    server3:
-    server4:
+    s0.infra:
+    s1.infra:
+    s2.infra:
+    s3.infra:
+    s4.infra:
   children:
     haproxy:
       hosts:
-        server0:
+        s0.infra:
     apache:
       hosts:
-        server1:
-        server2:
+        s1.infra:
+        s2.infra:
     mariadb:
       hosts:
-        server3:
+        s3.infra:
     nfs:
       hosts:
-        server4:
+        s4.infra:

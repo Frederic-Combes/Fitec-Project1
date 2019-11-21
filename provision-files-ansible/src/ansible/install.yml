@@ -1,5 +1,4 @@
 ---
-
 - hosts: nfs
   tasks:
     - name: Create /data
@@ -11,7 +10,7 @@
         name: geerlingguy.nfs
       vars:
         nfs_exports:
-          - "/data server*(rw,sync,no_root_squash,subtree_check)"
+          - "/data s*.infra(rw,sync,no_root_squash,subtree_check)"
 
 - hosts: apache
   tasks:
@@ -21,7 +20,7 @@
     - name: Mount /var/www/ on nfs:/data
       mount:
         path: /var/www
-        src: server4:/data
+        src: s4.infra:/data
         fstype: nfs
         state: mounted
     - name: Ensure /var/www/html exists and is owned by www-data
@@ -30,17 +29,12 @@
         owner: www-data
         group: www-data
         state: directory
-    # - name: Gather stats for /var/www/html/index.html
-    #   stat:
-    #     path:: /var/www/html/index.html
-    #     register: var_www_index_html
     - name: Ensures that /var/www/html/index.html exists is owned by www-data
       file:
         dest: /var/www/html/index.html
         owner: www-data
         group: www-data
         state: touch
-      # when: var_www_index_html.stat.exists == False
 
 - hosts: haproxy
   become: true
@@ -50,10 +44,10 @@
         name: geerlingguy.haproxy
       vars:
         haproxy_backend_servers:
-          - name: server1
-            address: server1:80
-          - name: server2
-            address: server2:80
+          - name: s1.infra
+            address: s1.infra:80
+          - name: s2.infra
+            address: s2.infra:80
 
 - hosts: apache
   tasks:
@@ -110,10 +104,6 @@
         enabled: yes
       vars:
         - mariadb_service: mysql
-    # - name: Set Mariadb root password
-    #   mysql_user:
-    #     name: root
-    #     password: rootpwd12
     - name: Ensure Mariadb database are present
       mysql_db:
         name: "{{ item.name }}"
@@ -161,7 +151,7 @@
             dbname: devopsdb
             dbuser: devops
             dbpass: "devopspwd123"
-            dbhost: server3
+            dbhost: s3.infra
             path: "/var/www/devops.com"
             title: devops
             admin_name: admin
@@ -179,7 +169,7 @@
             dbname: devsecdb
             dbuser: devsec
             dbpass: "devsecpwd123"
-            dbhost: server3
+            dbhost: s3.infra
             path: "/var/www/devsec.com"
             title: devsec
             admin_name: admin
@@ -197,7 +187,7 @@
             dbname: devsecopsdb
             dbuser: devsecops
             dbpass: "devsecopspwd123"
-            dbhost: server3
+            dbhost: s3.infra
             path: "/var/www/devsecops.com"
             title: devsecops
             admin_name: admin

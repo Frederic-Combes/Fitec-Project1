@@ -12,14 +12,14 @@ Vagrant.configure("2") do |config|
 
     # Configure cluster nodes server0 ... server4
     5.times do |id|
-        config.vm.define "server#{id}" do |machine|
+        config.vm.define "s#{id}.infra" do |machine|
             machine.vm.provider "virtualbox" do |vb|
                 vb.gui = false                                                          # No GUI
                 vb.memory = "2048"                                                      # Give less RAM
                 vb.cpus = 1                                                             # Give less CPU
             end
 
-            machine.vm.hostname = "server#{id}"
+            machine.vm.hostname = "s#{id}.infra"
             machine.vm.network "private_network", ip: "192.168.50.#{100+id}"
 
             # Provisioning

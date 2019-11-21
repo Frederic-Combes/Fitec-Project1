@@ -9,7 +9,7 @@ vagrant up
 Provision server0 (after modifying the ansible install playbook):
 
 ```bash
-vagrant rsync && vagrant provision server0
+vagrant rsync server0 && vagrant provision server0
 ```
 
 Run the Ansible `install.yml` playbook:
