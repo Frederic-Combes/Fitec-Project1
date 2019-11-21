@@ -7,8 +7,11 @@
           - dnsmasq
     - name: Configure DNSmasq
       template:
-        src: "etc_dnsmasq.conj.j"
+        src: "etc_dnsmasq.conf.j2"
         dest: "/etc/dnsmasq.conf"
+          template:
+            src: "etc_dnsmasq_static_hosts.conf.j2"
+            dest: "/etc/dnsmasq.conf"
     - name: Restart DNSmasq service
       service:
         name: dnsmasq
