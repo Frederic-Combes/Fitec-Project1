@@ -1,1 +1,0 @@
-{"rsync":{"/provision-files":{"type":"rsync","guestpath":"/provision-files","hostpath":"C:/Users/Fitec/Documents/Project1/provision-files-ansible","disabled":false,"__vagrantfile":true,"owner":"vagrant","group":"vagrant"}}}
