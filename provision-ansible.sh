@@ -58,7 +58,7 @@ chmod 0600 $VAGRANT_HOME/.ssh/github_rsa
 
 # Setup SSH config File
 cat > $VAGRANT_HOME/.ssh/config <<-MARK
-	Host server*
+	Host s*.infra
 	    User root
 	    IdentityFile ~/.ssh/ansible_rsa
 	    StrictHostKeyChecking no
