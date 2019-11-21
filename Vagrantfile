@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
         vb.gui = false
     end
 
-    # Configure cluster nodes server0 ... server4
+    # Configure cluster nodes s0.infra ... s4.infra
     5.times do |id|
         config.vm.define "s#{id}.infra" do |machine|
             machine.vm.provider "virtualbox" do |vb|
