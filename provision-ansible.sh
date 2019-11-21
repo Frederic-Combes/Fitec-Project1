@@ -31,7 +31,7 @@ cat >> /etc/hosts <<-MARK
 MARK
 
 cat > /etc/resolv.conf <<-MARK
-nameserver 192.168.50.100
+nameserver 8.8.8.8
 MARK
 
 # Allow the ansible SSH key

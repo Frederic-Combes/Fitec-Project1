@@ -9,9 +9,10 @@
       template:
         src: "etc_dnsmasq.conf.j2"
         dest: "/etc/dnsmasq.conf"
-          template:
-            src: "etc_dnsmasq_static_hosts.conf.j2"
-            dest: "/etc/dnsmasq.conf"
+    - name: Configure DNSmasq static hosts
+      template:
+        src: "etc_dnsmasq_static_hosts.conf.j2"
+        dest: "/etc/dnsmasq_static_hosts.conf"
     - name: Restart DNSmasq service
       service:
         name: dnsmasq

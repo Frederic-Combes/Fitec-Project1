@@ -2,12 +2,12 @@ domain-needed
 bogus-priv
 
 server=8.8.8.8
-interface=eth0
+interface=eth1
 local=/infra/
 domain=infra
 dhcp-range=192.168.50.101,192.168.50.200,24h
 
 dhcp-host=s1.infra,192.168.50.201,36h
-dhcp-host=s1.infra,192.168.50.202,36h
-dhcp-host=s1.infra,192.168.50.203,36h
-dhcp-host=s1.infra,192.168.50.204,36h
+dhcp-host=s2.infra,192.168.50.202,36h
+dhcp-host=s3.infra,192.168.50.203,36h
+dhcp-host=s4.infra,192.168.50.204,36h

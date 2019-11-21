@@ -24,6 +24,10 @@ cat >> /etc/hosts <<-MARK
 	## END PROVISION
 MARK
 
+cat > /etc/resolv.conf <<-MARK
+nameserver 192.168.50.100
+MARK
+
 # Allow the ansible SSH key
 mkdir -p /root/.ssh
 cat /provision-files/ansible_rsa.pub >> $ROOT_HOME/.ssh/authorized_keys || :
@@ -36,5 +40,8 @@ chmod 0600 $ROOT_HOME/.ssh/*
 chmod 0700 $ROOT_HOME/.ssh
 
 chmod 0644 $ROOT_HOME/.ssh/config || :
+
+# DHCP stuff
+echo "iface eth1 inet dhcp" > /etc/network/interfaces.d/eth1
 
 echo "Successfully provisionned $HOSTNAME"
