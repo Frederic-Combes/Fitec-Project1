@@ -11,13 +11,13 @@ Another provision run may be necessary for DCHP ip to be attributed:
 vagrant provision
 ```
 
-Provision ```control``` (after modifying the ansible playbooks):
+Rerun all playbooks (after modifying anyone for instance):
 
 ```bash
 vagrant provision control
 ```
 
-Manually run the Ansible `install.yml` playbook:
+Manually run a single ansible `playbook_name.yml` playbook:
 
 ```bash
 vagrant ssh control
