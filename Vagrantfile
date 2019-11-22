@@ -25,14 +25,36 @@ Vagrant.configure("2") do |config|
             # Provisioning
             if id == 0
                 machine.vm.network "forwarded_port", guest: 80, host: 80
-
-                machine.vm.provision "shell", path: "provision-ansible.sh"
-                machine.vm.synced_folder "provision-files-ansible/", "/provision-files", type: "rsync"  # Sync the contents of sync-master to /provision-files
-            else
-                machine.vm.provision "shell", path: "provision.sh"
-                machine.vm.synced_folder "provision-files/", "/provision-files", type: "rsync"  # Sync the contents of sync-master to /provision-files
             end
+
+
+            machine.vm.synced_folder "provision-files/", "/provision-files", type: "rsync"  # Sync the contents of sync-master to /provision-files
             machine.vm.synced_folder ".", "/vagrant", disabled: true                    # Disable default folder syncing
+
+            machine.vm.provision "shell", path: "provision-scripts/provision-base-packages.sh"
+            machine.vm.provision "shell", path: "provision-scripts/provision-authorize-keys.sh"
+            machine.vm.provision "shell", path: "provision-scripts/provision-hosts.sh"
+            machine.vm.provision "shell", path: "provision-scripts/provision-dhcp.sh"
         end
+    end
+
+    config.vm.define "control" do |machine|
+        machine.vm.provider "virtualbox" do |vb|
+            vb.gui = false
+            vb.memory = "2048"
+            vb.cpus = 1
+        end
+
+        machine.vm.hostname = "control"
+        machine.vm.network "private_network", ip: "192.168.50.50"
+        machine.vm.synced_folder ".", "/vagrant", disabled: true
+        machine.vm.synced_folder "provision-files/", "/provision-files", type: "rsync"
+
+        machine.vm.provision "shell", path: "provision-scripts/provision-base-packages.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-anisble-package.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-authorize-keys.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-add-keys.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-hosts.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-ansible-play.sh"
     end
 end

@@ -16,7 +16,7 @@ apt-get update
 apt-get install -y apt-transport-https ca-certificates gnupg2
 apt-get install -y curl wget rsync
 apt-get install -y git vim
-apt-get install -y python3 software-properties-common make
+apt-get install -y python3 software-properties-common
 
 # Ansible
 apt-get update
