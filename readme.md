@@ -6,16 +6,21 @@ Start the virtual machines:
 vagrant up
 ```
 
-Provision server0 (after modifying the ansible install playbook):
-
+Another provision run may be necessary for DCHP ip to be attributed:
 ```bash
-vagrant rsync s0.infra && vagrant provision s0.infra
+vagrant provision
 ```
 
-Run the Ansible `install.yml` playbook:
+Provision ```control``` (after modifying the ansible playbooks):
 
 ```bash
-vagrant ssh s0.infra
+vagrant provision control
+```
+
+Manually run the Ansible `install.yml` playbook:
+
+```bash
+vagrant ssh control
 cd src/ansible
-ansible-playbook -i inventories/cluster.yml install.yml
+ansible-playbook -i inventories/cluster.yml playbook_name.yml
 ```
