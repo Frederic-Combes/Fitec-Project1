@@ -10,18 +10,22 @@ SYNC_FOLDER="/provision-files"
 
 export DEBIAN_FRONTEND=noninteractive
 
-if [ $HOSTNAME = "s0.infra" ]
+if [ "$HOSTNAME" = "s0" ]
 then
 	cat > /etc/resolv.conf <<-MARK
+	nameserver 192.168.50.100
 	nameserver 1.1.1.1
 	MARK
 else
 	cat > /etc/resolv.conf <<-MARK
 	nameserver 192.168.50.100
 	MARK
-end
+fi
 
-echo "iface eth1 inet dhcp" > /etc/network/interfaces.d/eth1
-dhclient -r eth1
+if [ "$PERFORM_DHCLIENT" = "true" ]
+then
+	echo "iface eth1 inet dhcp" > /etc/network/interfaces.d/eth1
+	dhclient -v eth1
+fi
 
-echo "DHCP: $HOSTNAME: done."
+echo "[SUCCESS] DHCP: $HOSTNAME."

@@ -33,4 +33,4 @@ chmod 0600 $VAGRANT_HOME/.ssh/*
 chmod 0644 $VAGRANT_HOME/.ssh/config
 chmod 0700 $VAGRANT_HOME/.ssh
 
-echo "Add keys: $HOSTNAME: done."
+echo "[SUCCESS] Add keys: $HOSTNAME."

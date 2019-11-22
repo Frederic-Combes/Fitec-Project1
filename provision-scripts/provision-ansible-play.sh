@@ -10,8 +10,12 @@ SYNC_FOLDER="/provision-files"
 
 export DEBIAN_FRONTEND=noninteractive
 
-cd $VAGRANT_HOME/src/ansible
-ansible-playbook -i inventories/cluster.yml install-dhcp.yml
-ansible-playbool -i inventories/cluster.yml install.yml
+mkdir -p $VAGRANT_HOME/src
+cp -R $SYNC_FOLDER/src/ $VAGRANT_HOME/ || :
+chown -R vagrant:vagrant $VAGRANT_HOME/src/
 
-echo "Ansible play: $HOSTNAME: done."
+cd $VAGRANT_HOME/src/ansible
+su vagrant -c "ansible-playbook -i inventories/cluster.yml install-dhcp.yml"
+su vagrant -c "ansible-playbook -i inventories/cluster.yml install.yml"
+
+echo "[SUCCESS] Ansible play: $HOSTNAME."

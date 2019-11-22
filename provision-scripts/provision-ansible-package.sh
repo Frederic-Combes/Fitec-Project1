@@ -13,4 +13,4 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y ansible
 
-echo "Ansible package: $HOSTNAME: done."
+echo "[SUCCESS] Ansible package: $HOSTNAME."

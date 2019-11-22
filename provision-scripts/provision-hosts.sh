@@ -18,4 +18,4 @@ cat >> /etc/hosts <<-MARK
 	## END PROVISION
 MARK
 
-echo "Hosts: $HOSTNAME: done."
+echo "[SUCCESS] Hosts: $HOSTNAME: done."

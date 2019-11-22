@@ -20,11 +20,13 @@ Vagrant.configure("2") do |config|
             end
 
             machine.vm.hostname = "s#{id}.infra"
-            machine.vm.network "private_network",  ip: "192.168.50.#{100 + id}", auto_config: false
 
             # Provisioning
             if id == 0
+                machine.vm.network "private_network",  ip: "192.168.50.#{100 + id}"
                 machine.vm.network "forwarded_port", guest: 80, host: 80
+            else
+                machine.vm.network "private_network",  ip: "192.168.50.#{100 + id}", auto_config: false
             end
 
 
@@ -34,7 +36,15 @@ Vagrant.configure("2") do |config|
             machine.vm.provision "shell", path: "provision-scripts/provision-base-packages.sh"
             machine.vm.provision "shell", path: "provision-scripts/provision-authorize-keys.sh"
             machine.vm.provision "shell", path: "provision-scripts/provision-hosts.sh"
-            machine.vm.provision "shell", path: "provision-scripts/provision-dhcp.sh"
+            if id == 0
+                machine.vm.provision "shell",
+                  path: "provision-scripts/provision-dhcp.sh",
+                  env: {"PERFORM_DHCLIENT" => "false"}
+            else
+                machine.vm.provision "shell",
+                  path: "provision-scripts/provision-dhcp.sh",
+                  env: {"PERFORM_DHCLIENT" => "true"}
+            end
         end
     end
 
@@ -48,13 +58,14 @@ Vagrant.configure("2") do |config|
         machine.vm.hostname = "control"
         machine.vm.network "private_network", ip: "192.168.50.50"
         machine.vm.synced_folder ".", "/vagrant", disabled: true
-        machine.vm.synced_folder "provision-files/", "/provision-files", type: "rsync"
+        machine.vm.synced_folder "provision-files-ansible/", "/provision-files", type: "rsync"
 
         machine.vm.provision "shell", path: "provision-scripts/provision-base-packages.sh"
-        machine.vm.provision "shell", path: "provision-scripts/provision-anisble-package.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-ansible-package.sh"
         machine.vm.provision "shell", path: "provision-scripts/provision-authorize-keys.sh"
         machine.vm.provision "shell", path: "provision-scripts/provision-add-keys.sh"
         machine.vm.provision "shell", path: "provision-scripts/provision-hosts.sh"
+        machine.vm.provision "shell", path: "provision-scripts/provision-dhcp.sh", env: {"PERFORM_DHCLIENT" => "false"}
         machine.vm.provision "shell", path: "provision-scripts/provision-ansible-play.sh"
     end
 end
