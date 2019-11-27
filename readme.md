@@ -11,7 +11,7 @@ Another provision run may be necessary for DCHP ip to be attributed:
 vagrant provision
 ```
 
-Rerun all playbooks (after modifying anyone for instance):
+Rerun all playbooks (after modifying any, for instance):
 
 ```bash
 vagrant provision control
